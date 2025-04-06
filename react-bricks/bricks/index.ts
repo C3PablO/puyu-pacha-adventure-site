@@ -2,8 +2,8 @@ import { types } from 'react-bricks/rsc'
 
 import HeroUnit from './custom/MyHeroUnit'
 import Pokemon from './custom/Pokemon'
-// import RegisterBrick from './custom/RegisterBrick/RegisterBrick'
 import reactBricksUITheme from './react-bricks-ui'
+import Thumbnail from './custom/Thumbnail' // [!code highlight]
 
 const bricks: types.Theme[] = [
   reactBricksUITheme, // React Bricks UI
@@ -12,12 +12,10 @@ const bricks: types.Theme[] = [
     categories: [
       {
         categoryName: 'Custom bricks',
-        bricks: [HeroUnit, Pokemon], // Custom Bricks
+        bricks: [HeroUnit, Pokemon, Thumbnail], // [!code highlight]
       },
     ],
   },
 ]
-
-// const bricks = [HeroUnit]
 
 export default bricks
