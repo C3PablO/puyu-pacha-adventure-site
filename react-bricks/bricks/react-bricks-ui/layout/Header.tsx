@@ -27,51 +27,56 @@ const Header: types.Brick<HeaderProps> = ({
 }) => {
   return (
     <HeaderProvider>
-      <Section
-        backgroundColor={backgroundColor}
-        borderBottom={borderBottom ? 'full' : 'none'}
+      <div
+      className='absolute top-0 left-0 w-full z-50 dark'
+      style={{ colorScheme: 'dark' }}
       >
-        <nav className="py-5 px-5 sm:mx-[5.55555%] xl:mx-[11.1111%] flex justify-start items-center">
-          <Link
-            href="/"
-            aria-label="home"
-            className="inline-flex py-1.5 px-2 mr-6"
-          >
-            <Image
-              propName="logo"
-              source={logo}
-              alt="Logo"
-              maxWidth={300}
-              imageClassName="block w-32 h-7 object-contain object-left"
-            />
-          </Link>
-          <div className="hidden lg:flex items-center space-x-2">
-            <Repeater propName="menuItems" items={menuItems} />
-          </div>
-          <div className="hidden lg:block ml-auto">
-            <Repeater
-              propName="buttons"
-              items={buttons}
-              // No local link to avoid prefetching
-              // of the Admin bundle in case of link
-              // to Edit content
-              itemProps={{ simpleAnchorLink: true }}
-              renderWrapper={(item) => (
-                <div
-                  key={item.key}
-                  className="flex flex-row space-x-5 items-center justify-end"
-                >
-                  {item}
-                </div>
-              )}
-            />
-          </div>
+        <Section
+          backgroundColor={{ color: "transparent", className: '' }}
+          borderBottom={borderBottom ? 'full' : 'none'}
+        >
+          <nav className="py-2 px-5 sm:mx-[5.55555%] xl:mx-[11.1111%] flex justify-start items-center">
+            <Link
+              href="/"
+              aria-label="home"
+              className="inline-flex py-1.5 px-2 mr-6"
+            >
+              <Image
+                propName="logo"
+                source={logo}
+                alt="Logo"
+                maxWidth={300}
+                imageClassName="block w-32 h-12 object-contain object-left"
+              />
+            </Link>
+            <div className="hidden lg:flex items-center space-x-2">
+              <Repeater propName="menuItems" items={menuItems} />
+            </div>
+            <div className="hidden lg:block ml-auto">
+              <Repeater
+                propName="buttons"
+                items={buttons}
+                // No local link to avoid prefetching
+                // of the Admin bundle in case of link
+                // to Edit content
+                itemProps={{ simpleAnchorLink: true }}
+                renderWrapper={(item) => (
+                  <div
+                    key={item.key}
+                    className="flex flex-row space-x-5 items-center justify-end"
+                  >
+                    {item}
+                  </div>
+                )}
+              />
+            </div>
 
-          <HeaderClient
-            menuItems={<Repeater propName="menuItems" items={menuItems} />}
-          ></HeaderClient>
-        </nav>
-      </Section>
+            <HeaderClient
+              menuItems={<Repeater propName="menuItems" items={menuItems} />}
+            ></HeaderClient>
+          </nav>
+        </Section>
+      </div>
     </HeaderProvider>
   )
 }

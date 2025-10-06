@@ -16,7 +16,7 @@ import { ThemeProvider } from '@/components/themeProvider'
 import { i18n } from '@/i18n-config'
 import config from '@/react-bricks/config'
 
-import { Nunito_Sans } from 'next/font/google'
+import { Nunito_Sans, Playwrite_HU } from 'next/font/google'
 
 import '@/css/styles.css'
 
@@ -32,6 +32,12 @@ const nunito = Nunito_Sans({
   weight: ['300', '400', '600', '700', '800', '900'],
   style: ['normal', 'italic'],
   variable: '--font-nunito',
+})
+
+const playwriteHU = Playwrite_HU({
+  weight: ['100', '200', '300', '400'],
+  display: 'swap',
+  variable: '--font-playwrite-hu',
 })
 
 register(config)
@@ -111,7 +117,7 @@ export default async function Layout(props: {
   return (
     <html lang={params.lang} suppressHydrationWarning>
       <body
-        className={`${nunito.variable} font-sans dark:bg-gray-900 antialiased`}
+        className={`${nunito.variable} ${playwriteHU.variable} font-sans dark:bg-gray-900 antialiased`}
       >
         <ThemeProvider
           attribute="class"

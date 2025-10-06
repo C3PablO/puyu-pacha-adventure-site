@@ -13,7 +13,10 @@ import ErrorNoHeader from '@/components/errorNoHeader'
 import ErrorNoKeys from '@/components/errorNoKeys'
 import PageLayout from '@/components/layout'
 import { ThemeProvider } from '@/components/themeProvider'
+import { i18n } from '@/i18n-config'
 import config from '@/react-bricks/config'
+
+import { Nunito_Sans, Playwrite_HU } from 'next/font/google'
 
 import '@/css/styles.css'
 
@@ -21,6 +24,21 @@ export const metadata = {
   title: 'React Bricks Starter',
   description: 'Next.js with Server Components',
 }
+
+const nunito = Nunito_Sans({
+  adjustFontFallback: false,
+  subsets: ['latin'],
+  display: 'swap',
+  weight: ['300', '400', '600', '700', '800', '900'],
+  style: ['normal', 'italic'],
+  variable: '--font-nunito',
+})
+
+const playwriteHU = Playwrite_HU({
+  weight: ['100', '200', '300', '400'],
+  display: 'swap',
+  variable: '--font-playwrite-hu',
+})
 
 register(config)
 
@@ -71,14 +89,11 @@ const getData = async (
 
 export default async function Layout(props: {
   children: React.ReactNode
-  params: Promise<{ lang: string }>
 }) {
-  const params = await props.params
-
   const { children } = props
 
   const { header, footer, errorNoKeys, errorHeader, errorFooter } =
-    await getData(params.lang)
+    await getData(i18n.defaultLocale)
 
   // Clean the received content
   // Removes unknown or not allowed bricks
@@ -91,8 +106,8 @@ export default async function Layout(props: {
     : null
 
   return (
-    <html lang={params.lang} suppressHydrationWarning>
-      <body className={`bg-white dark:bg-[#0d1117]`}>
+    <html lang={i18n.defaultLocale} suppressHydrationWarning>
+      <body className={`${nunito.variable} ${playwriteHU.variable} font-sans bg-white dark:bg-[#0d1117] antialiased`}>
         <ThemeProvider
           attribute="class"
           storageKey="color-mode"
