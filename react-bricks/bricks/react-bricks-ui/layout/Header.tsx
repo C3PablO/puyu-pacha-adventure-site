@@ -35,7 +35,7 @@ const Header: types.Brick<HeaderProps> = ({
           backgroundColor={{ color: "transparent", className: '' }}
           borderBottom={borderBottom ? 'full' : 'none'}
         >
-          <nav className="py-2 px-5 sm:mx-[5.55555%] xl:mx-[11.1111%] flex justify-start items-center">
+          <nav className="py-0 px-5 sm:mx-[5.55555%] xl:mx-[11.1111%] flex justify-start items-center">
             <Link
               href="/"
               aria-label="home"
