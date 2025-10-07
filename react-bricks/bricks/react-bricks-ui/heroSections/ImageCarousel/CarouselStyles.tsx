@@ -222,7 +222,7 @@ const CarouselStyles = () => {
                 display: inline-block;
                 width: 20px;
                 height: 20px;
-                margin: 0 5px;
+                margin: 0 2px;
                 padding: 0;
                 cursor: pointer;
             }

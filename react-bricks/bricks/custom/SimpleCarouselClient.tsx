@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Slider from 'react-slick'
 import { Repeater, types } from 'react-bricks/rsc'
 import { FaPause, FaPlay } from 'react-icons/fa'
+import { MdOutlineKeyboardArrowRight, MdOutlineKeyboardArrowLeft } from "react-icons/md";
 import Container from '../react-bricks-ui/shared/components/Container'
 import CarouselStyles from '../react-bricks-ui/heroSections/ImageCarousel/CarouselStyles'
 
@@ -11,6 +12,32 @@ export interface SimpleCarouselProps {
   autoplaySpeed: number
   images: types.RepeaterItems,
   backgroundColor: types.IColor & { className: string }
+}
+
+const PrevArrow = (props: any) => {
+  const { onClick } = props
+  return (
+    <button
+      onClick={onClick}
+      className="absolute left-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-white/20 hover:bg-white/40 flex items-center justify-center transition-all duration-300 group"
+      aria-label="Previous slide"
+    >
+      <MdOutlineKeyboardArrowLeft className="text-4xl text-white" />
+    </button>
+  )
+}
+
+const NextArrow = (props: any) => {
+  const { onClick } = props
+  return (
+    <button
+      onClick={onClick}
+      className="absolute right-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full  bg-white/20 hover:bg-white/40 flex items-center justify-center transition-all duration-300 group"
+      aria-label="Next slide"
+    >
+      <MdOutlineKeyboardArrowRight className="text-4xl text-white" />
+    </button>
+  )
 }
 
 const SimpleCarouselClient: React.FC<SimpleCarouselProps> = ({
@@ -46,7 +73,10 @@ const SimpleCarouselClient: React.FC<SimpleCarouselProps> = ({
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: autoplaySpeed * 1000,
+    pauseOnHover: false,
     arrows: true,
+    prevArrow: <PrevArrow />,
+    nextArrow: <NextArrow />,
     fade: true,
     cssEase: 'ease-in-out',
   }
@@ -71,35 +101,29 @@ const SimpleCarouselClient: React.FC<SimpleCarouselProps> = ({
         .simple-carousel .slick-dots {
           bottom: 20px;
         }
+        .simple-carousel .slick-dots li {
+          margin: 0 4px;
+        }
+        .simple-carousel .slick-dots li button {
+          width: 12px;
+          height: 12px;
+          padding: 0;
+        }
         .simple-carousel .slick-dots li button:before {
-          font-size: 12px;
-          color: white;
-          opacity: 0.5;
+          content: '';
+          width: 12px;
+          height: 12px;
+          border-radius: 50%;
+          background-color: rgba(255, 255, 255, 0.5);
+          opacity: 1;
+          transition: all 0.3s;
         }
         .simple-carousel .slick-dots li.slick-active button:before {
-          opacity: 1;
-          color: white;
+          background-color: rgba(255, 255, 255, 1);
+          transform: scale(1.2);
         }
-        .simple-carousel .slick-prev,
-        .simple-carousel .slick-next {
-          z-index: 10;
-          width: 40px;
-          height: 40px;
-        }
-        .simple-carousel .slick-prev {
-          left: 20px;
-        }
-        .simple-carousel .slick-next {
-          right: 20px;
-        }
-        .simple-carousel .slick-prev:before,
-        .simple-carousel .slick-next:before {
-          font-size: 40px;
-          opacity: 0.75;
-        }
-        .simple-carousel .slick-prev:hover:before,
-        .simple-carousel .slick-next:hover:before {
-          opacity: 1;
+        .simple-carousel .slick-dots li button:hover:before {
+          background-color: rgba(255, 255, 255, 0.75);
         }
       `}</style>
 
@@ -123,9 +147,9 @@ const SimpleCarouselClient: React.FC<SimpleCarouselProps> = ({
         aria-label={isPlaying ? 'Pause carousel' : 'Play carousel'}
       >
         {isPlaying ? (
-          <FaPause className="text-xl" />
+          <FaPause className="text-sm" />
         ) : (
-          <FaPlay className="text-xl" />
+          <FaPlay className="text-sm" />
         )}
       </button>
     </Container>

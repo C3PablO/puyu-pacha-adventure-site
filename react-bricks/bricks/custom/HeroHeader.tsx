@@ -31,7 +31,7 @@ const HeroHeader: types.Brick<HeroHeaderProps> = ({
     <header
       className="hero-header w-full h-screen relative flex flex-col items-center justify-start dark pt-16"
       style={{
-        backgroundColor: '#041B3B',
+        backgroundColor: '#08274a',
         colorScheme: 'dark',
         backgroundImage: bgImageUrl
           ? `linear-gradient(180deg, #060E1A 0%, #060E1A 20%, rgba(0, 0, 0, 0) 60%), url(${bgImageUrl})`

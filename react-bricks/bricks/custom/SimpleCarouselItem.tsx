@@ -12,7 +12,7 @@ const SimpleCarouselItem: types.Brick<SimpleCarouselItemProps> = ({ image }) => 
         source={image}
         alt="Carousel image"
         maxWidth={2000}
-        imageClassName="w-full h-auto object-contain"
+        imageClassName="w-full h-auto object-contain rounded-lg"
       />
     </div>
   )

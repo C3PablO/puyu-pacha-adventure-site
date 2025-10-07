@@ -8,6 +8,7 @@ import HeroHeader from './custom/HeroHeader'
 import WhatsAppButton from './custom/WhatsAppButton'
 import SimpleCarousel from './custom/SimpleCarousel'
 import SimpleCarouselItem from './custom/SimpleCarouselItem'
+import AnchorPoint from './custom/AnchorPoint'
 
 const bricks: types.Theme[] = [
   reactBricksUITheme, // React Bricks UI
@@ -24,6 +25,7 @@ const bricks: types.Theme[] = [
           WhatsAppButton,
           SimpleCarousel,
           SimpleCarouselItem,
+          AnchorPoint,
         ], // [!code highlight]
       },
     ],
