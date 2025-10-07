@@ -28,7 +28,7 @@ const Header: types.Brick<HeaderProps> = ({
   return (
     <HeaderProvider>
       <div
-      className='absolute top-0 left-0 w-full z-50 dark'
+      className='fixed top-0 left-0 w-full z-50 dark bg-[#060E1A]'
       style={{ colorScheme: 'dark' }}
       >
         <Section

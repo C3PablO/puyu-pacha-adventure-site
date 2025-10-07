@@ -34,8 +34,8 @@ const HeroHeader: types.Brick<HeroHeaderProps> = ({
         backgroundColor: '#041B3B',
         colorScheme: 'dark',
         backgroundImage: bgImageUrl
-          ? `linear-gradient(180deg, #060E1A 0%, rgba(0, 0, 0, 0) 40%), url(${bgImageUrl})`
-          : 'linear-gradient(180deg, #060E1A 0%, rgba(0, 0, 0, 0) 40%)',
+          ? `linear-gradient(180deg, #060E1A 0%, #060E1A 20%, rgba(0, 0, 0, 0) 60%), url(${bgImageUrl})`
+          : 'linear-gradient(180deg, #060E1A 0%, #060E1A 20%, rgba(0, 0, 0, 0) 60%)',
         backgroundPosition: 'top center, bottom center',
         backgroundRepeat: 'no-repeat, no-repeat', 
         backgroundSize: 'cover, 100% auto',

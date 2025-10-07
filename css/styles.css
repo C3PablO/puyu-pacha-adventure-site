@@ -38,10 +38,21 @@
     border-color: var(--color-gray-200, currentColor);
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   .hero-header h1,
   .hero-header h2,
   .hero-header h3 {
     font-family: var(--font-playwrite-hu), cursive;
+  }
+
+  a[href="https://reactbricks.com?utm_campaign=site-badge"] {
+    display: none !important;
+  }
+  .rb-click-to-edit {
+    display: none !important;
   }
 
   /* Hero Header Mobile Responsive Background */
