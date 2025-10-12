@@ -19,7 +19,7 @@ const PrevArrow = (props: any) => {
   return (
     <button
       onClick={onClick}
-      className="absolute left-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-white/20 hover:bg-white/40 flex items-center justify-center transition-all duration-300 group"
+      className="absolute left-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-white/20 hover:bg-white/40 flex items-center justify-center transition-all duration-300 group hidden md:flex"
       aria-label="Previous slide"
     >
       <MdOutlineKeyboardArrowLeft className="text-4xl text-white" />
@@ -32,7 +32,7 @@ const NextArrow = (props: any) => {
   return (
     <button
       onClick={onClick}
-      className="absolute right-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full  bg-white/20 hover:bg-white/40 flex items-center justify-center transition-all duration-300 group"
+      className="absolute right-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full  bg-white/20 hover:bg-white/40 flex items-center justify-center transition-all duration-300 group hidden  md:flex"
       aria-label="Next slide"
     >
       <MdOutlineKeyboardArrowRight className="text-4xl text-white" />
@@ -95,11 +95,25 @@ const SimpleCarouselClient: React.FC<SimpleCarouselProps> = ({
     <Container
     className={`relative lg:pt-16 pb-12 lg:pb-16`}
       >
+        {/* Play/Pause Button */}
+        <div className="flex justify-end">
+          <button
+            onClick={togglePlayPause}
+            className="z-20 text-current p-2 duration-300"
+            aria-label={isPlaying ? 'Pause carousel' : 'Play carousel'}
+          >
+            {isPlaying ? (
+              <FaPause className="text-sm" />
+            ) : (
+              <FaPlay className="text-sm" />
+            )}
+          </button>
+        </div>
       <CarouselStyles />
       {/* Custom Carousel Styles */}
       <style>{`
         .simple-carousel .slick-dots {
-          bottom: 20px;
+          position: static;
         }
         .simple-carousel .slick-dots li {
           margin: 0 4px;
@@ -114,16 +128,16 @@ const SimpleCarouselClient: React.FC<SimpleCarouselProps> = ({
           width: 12px;
           height: 12px;
           border-radius: 50%;
-          background-color: rgba(255, 255, 255, 0.5);
+          background-color: rgba(0, 0, 0, 0.5);
           opacity: 1;
           transition: all 0.3s;
         }
         .simple-carousel .slick-dots li.slick-active button:before {
-          background-color: rgba(255, 255, 255, 1);
+          background-color: rgba(0, 0, 0, 1);
           transform: scale(1.2);
         }
         .simple-carousel .slick-dots li button:hover:before {
-          background-color: rgba(255, 255, 255, 0.75);
+          background-color: rgba(0, 0, 0, 0.75);
         }
       `}</style>
 
@@ -139,19 +153,6 @@ const SimpleCarouselClient: React.FC<SimpleCarouselProps> = ({
           })}
         </SliderComponent>
       </div>
-
-      {/* Play/Pause Button */}
-      <button
-        onClick={togglePlayPause}
-        className="absolute top-20 right-8 z-20 bg-black bg-opacity-50 hover:bg-opacity-70 text-white p-3 rounded-full transition-all duration-300"
-        aria-label={isPlaying ? 'Pause carousel' : 'Play carousel'}
-      >
-        {isPlaying ? (
-          <FaPause className="text-sm" />
-        ) : (
-          <FaPlay className="text-sm" />
-        )}
-      </button>
     </Container>
     </div>
   )

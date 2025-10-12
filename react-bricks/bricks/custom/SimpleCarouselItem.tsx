@@ -1,4 +1,5 @@
 import { Image, types } from 'react-bricks/rsc'
+import { photos } from '../react-bricks-ui/shared/defaultImages'
 
 interface SimpleCarouselItemProps {
   image: types.IImageSource
@@ -24,8 +25,8 @@ SimpleCarouselItem.schema = {
   hideFromAddMenu: true,
   getDefaultProps: () => ({
     image: {
-      src: '/puyupacha01.png',
-      placeholderSrc: '/puyupacha01.png',
+      src: photos.SEASIDE.src,
+      placeholderSrc: photos.SEASIDE.placeholderSrc,
       srcSet: '',
       alt: 'Carousel image',
       seoName: 'carousel-image',
