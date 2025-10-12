@@ -36,7 +36,7 @@ const BigImage: types.Brick<BigImageProps> = ({
         paddingTop={paddingTop}
         paddingBottom={paddingBottom}
       >
-        <Image propName="image" source={image} alt="Image" maxWidth={1200} />
+        <Image propName="image" source={image} alt="Image" maxWidth={1200} imageClassName='m-auto' />
       </Container>
     </Section>
   )

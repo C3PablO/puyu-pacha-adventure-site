@@ -64,6 +64,10 @@
     display: none;
   }
 
+  .aspect-video iframe {
+    @apply rounded-lg;
+  }
+
   #react-bricks-brick .hero-header img{
     display: block;
     margin-top: 100px;
