@@ -55,6 +55,8 @@ const FormBuilderClient: React.FC<FormBuilderClientProps> = ({
         </h2>
       ) : (
         <form
+          method="POST"
+          data-netlify="true"
           onSubmit={handleSubmit(onSubmit)}
           className="grid grid-cols-2 gap-4 p-6"
         >
