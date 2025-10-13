@@ -41,7 +41,36 @@ const FormBuilderClient: React.FC<FormBuilderClientProps> = ({
   //   },
   // })
 
-  const onSubmit = () => console.log('SUBMITTED - ', formspreeFormId)
+  // const onSubmit = () => console.log('SUBMITTED - ', formspreeFormId)
+
+  const handleFormSubmit = async (data: Record<string, any>) => {
+    try {
+      const formData = new FormData()
+
+      // Convert data object to FormData
+      Object.entries(data).forEach(([key, value]) => {
+        if (value !== null && value !== undefined) {
+          formData.append(key, String(value))
+        }
+      })
+
+      const response = await fetch('/__forms.html', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(formData as any).toString(),
+      })
+
+      if (!response.ok) {
+        throw new Error(`Form submission failed with status ${response.status}`)
+      }
+
+      alert(successMessage || 'Form submitted successfully!')
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred'
+      alert(`Form submission failed: ${errorMessage}`)
+      console.error('Form submission error:', error)
+    }
+  }
 
   if (!register || !handleSubmit) {
     return null
@@ -56,8 +85,7 @@ const FormBuilderClient: React.FC<FormBuilderClientProps> = ({
       ) : (
         <form
           method="POST"
-          data-netlify="true"
-          onSubmit={handleSubmit(onSubmit)}
+         onSubmit={handleFormSubmit}
           className="grid grid-cols-2 gap-4 p-6"
         >
           {children}
