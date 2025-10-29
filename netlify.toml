@@ -1,0 +1,10 @@
+[[redirects]]
+  from = "/__forms.html"
+  to = "/__forms.html"
+  status = 200
+  force = false
+  
+[[headers]]
+  for = "/__forms.html"
+  [headers.values]
+    X-Robots-Tag = "noindex"

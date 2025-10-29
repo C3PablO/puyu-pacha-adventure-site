@@ -52,15 +52,12 @@ const FormBuilderClient: React.FC<FormBuilderClientProps> = ({
       const form = event.target
       const formData = new FormData(form)
 
-      // Convert FormData to URLSearchParams
-      const params = new URLSearchParams(formData as any)
+      console.log('Submitting form data:', Object.fromEntries(formData))
 
-      console.log('Submitting form data:', Object.fromEntries(params))
-
-      const response = await fetch('/__forms.html', {
+      // Submit directly to Netlify
+      const response = await fetch('/', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: params.toString(),
+        body: formData,
       })
 
       console.log('Form submission response:', response.status, response.statusText)
