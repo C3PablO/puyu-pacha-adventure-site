@@ -43,37 +43,6 @@ const FormBuilderClient: React.FC<FormBuilderClientProps> = ({
 
   // const onSubmit = () => console.log('SUBMITTED - ', formspreeFormId)
 
-  const handleFormSubmit = async (event: any) => {
-    // Prevent default form submission
-    event.preventDefault()
-
-    try {
-      // Get form element and create FormData from it
-      const form = event.target
-      const formData = new FormData(form)
-
-      console.log('Submitting form data:', Object.fromEntries(formData))
-
-      // Submit directly to Netlify
-      const response = await fetch('/', {
-        method: 'POST',
-        body: formData,
-      })
-
-      console.log('Form submission response:', response.status, response.statusText)
-
-      if (!response.ok) {
-        throw new Error(`Form submission failed with status ${response.status}`)
-      }
-
-      alert(successMessage || 'Form submitted successfully!')
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred'
-      alert(`Form submission failed: ${errorMessage}`)
-      console.error('Form submission error:', error)
-    }
-  }
-
   if (!register || !handleSubmit) {
     return null
   }
@@ -88,9 +57,9 @@ const FormBuilderClient: React.FC<FormBuilderClientProps> = ({
         <form
           name="feedback"
           method="POST"
+          action="/thank-you"
           data-netlify="true"
           data-netlify-honeypot="bot-field"
-          onSubmit={handleFormSubmit}
           className="grid grid-cols-2 gap-4 p-6"
         >
           <input type="hidden" name="form-name" value="feedback" />
