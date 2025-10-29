@@ -41,7 +41,44 @@ const FormBuilderClient: React.FC<FormBuilderClientProps> = ({
   //   },
   // })
 
-  // const onSubmit = () => console.log('SUBMITTED - ', formspreeFormId)
+  const handleFormSubmit = async (data: Record<string, any>) => {
+    try {
+      console.log('Submitting form with data:', data)
+
+      // Create FormData
+      const formData = new FormData()
+      formData.append('form-name', 'feedback')
+      formData.append('bot-field', '')
+      formData.append('subject', 'New Contact Form Submission')
+
+      Object.entries(data).forEach(([key, value]) => {
+        if (value !== null && value !== undefined) {
+          formData.append(key, String(value))
+        }
+      })
+
+      console.log('FormData entries:', Object.fromEntries(formData))
+
+      const response = await fetch('/api/submit-form', {
+        method: 'POST',
+        body: formData,
+      })
+
+      console.log('Response status:', response.status, response.statusText)
+
+      const responseText = await response.text()
+      console.log('Response body:', responseText)
+
+      if (response.ok) {
+        alert(successMessage || 'Form submitted successfully!')
+      } else {
+        alert('Form submission failed. Check console for details.')
+      }
+    } catch (error) {
+      console.error('Form submission error:', error)
+      alert('Form submission failed: ' + (error instanceof Error ? error.message : 'Unknown error'))
+    }
+  }
 
   if (!register || !handleSubmit) {
     return null
@@ -56,15 +93,9 @@ const FormBuilderClient: React.FC<FormBuilderClientProps> = ({
       ) : (
         <form
           name="feedback"
-          method="POST"
-          action="/api/submit-form"
-          data-netlify="true"
-          data-netlify-honeypot="bot-field"
+          onSubmit={handleSubmit(handleFormSubmit)}
           className="grid grid-cols-2 gap-4 p-6"
         >
-          <input type="hidden" name="form-name" value="feedback" />
-          <input type="hidden" name="bot-field" />
-          <input type="hidden" name="subject" value="New Contact Form Submission" />
           {children}
 
           {errors && errors.root && (

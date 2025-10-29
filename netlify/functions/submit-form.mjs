@@ -5,6 +5,8 @@ export default async (req) => {
     return new Response('Method not allowed', { status: 405 })
   }
 
+  const debugInfo = []
+
   try {
     const formData = await req.formData()
 
@@ -14,23 +16,37 @@ export default async (req) => {
       data[key] = value
     }
 
-    console.log('Form submission received:', data)
+    debugInfo.push('=== FORM DATA RECEIVED ===')
+    debugInfo.push(JSON.stringify(data, null, 2))
 
     // Get Resend API key from environment variable
     const resendApiKey = Netlify.env.get('RESEND_API_KEY')
 
+    debugInfo.push('\n=== RESEND API KEY ===')
+    debugInfo.push(resendApiKey ? `Found (${resendApiKey.substring(0, 10)}...)` : '❌ NOT FOUND')
+
     if (!resendApiKey) {
-      console.error('RESEND_API_KEY not configured')
-      return new Response(null, {
-        status: 303,
-        headers: { 'Location': '/thank-you' }
+      debugInfo.push('\n❌ ERROR: RESEND_API_KEY not configured in Netlify')
+      debugInfo.push('Go to: Netlify Dashboard → Site Configuration → Environment Variables')
+      debugInfo.push('Add variable: RESEND_API_KEY = your_resend_api_key')
+
+      return new Response(debugInfo.join('\n'), {
+        status: 500,
+        headers: { 'Content-Type': 'text/plain' }
       })
     }
 
     // Initialize Resend with API key
+    debugInfo.push('\n=== INITIALIZING RESEND ===')
     const resend = new Resend(resendApiKey)
+    debugInfo.push('✅ Resend initialized')
 
     // Send email using Resend SDK
+    debugInfo.push('\n=== SENDING EMAIL ===')
+    debugInfo.push('From: onboarding@resend.dev')
+    debugInfo.push('To: pabloromerojaren@gmail.com')
+    debugInfo.push(`Subject: ${data.subject || 'New Contact Form Submission'}`)
+
     const { data: emailData, error } = await resend.emails.send({
       from: 'onboarding@resend.dev',
       to: 'pabloromerojaren@gmail.com',
@@ -45,24 +61,29 @@ export default async (req) => {
       `
     })
 
+    debugInfo.push('\n=== RESEND RESPONSE ===')
     if (error) {
-      console.error('Resend error:', error)
+      debugInfo.push('❌ ERROR:')
+      debugInfo.push(JSON.stringify(error, null, 2))
     } else {
-      console.log('Email sent successfully:', emailData)
+      debugInfo.push('✅ SUCCESS!')
+      debugInfo.push(JSON.stringify(emailData, null, 2))
+      debugInfo.push('\n📧 Check your email at: pabloromerojaren@gmail.com')
     }
 
-    // Redirect to thank you page
-    return new Response(null, {
-      status: 303,
-      headers: { 'Location': '/thank-you' }
+    return new Response(debugInfo.join('\n'), {
+      status: error ? 500 : 200,
+      headers: { 'Content-Type': 'text/plain' }
     })
 
   } catch (error) {
-    console.error('Form submission error:', error)
-    // Still redirect to thank you even if email fails
-    return new Response(null, {
-      status: 303,
-      headers: { 'Location': '/thank-you' }
+    debugInfo.push('\n=== EXCEPTION ===')
+    debugInfo.push(error.message)
+    debugInfo.push(error.stack)
+
+    return new Response(debugInfo.join('\n'), {
+      status: 500,
+      headers: { 'Content-Type': 'text/plain' }
     })
   }
 }
