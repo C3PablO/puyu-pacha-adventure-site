@@ -47,6 +47,9 @@ const FormBuilderClient: React.FC<FormBuilderClientProps> = ({
     try {
       const formData = new FormData()
 
+      // Add form name for Netlify
+      formData.append('form-name', 'contact')
+
       // Convert data object to FormData
       Object.entries(data).forEach(([key, value]) => {
         if (value !== null && value !== undefined) {
@@ -54,7 +57,7 @@ const FormBuilderClient: React.FC<FormBuilderClientProps> = ({
         }
       })
 
-      const response = await fetch('/__forms.html', {
+      const response = await fetch('/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: new URLSearchParams(formData as any).toString(),
@@ -84,10 +87,13 @@ const FormBuilderClient: React.FC<FormBuilderClientProps> = ({
         </h2>
       ) : (
         <form
+          name="contact"
           method="POST"
-         onSubmit={handleFormSubmit}
+          data-netlify="true"
+          onSubmit={handleSubmit(handleFormSubmit)}
           className="grid grid-cols-2 gap-4 p-6"
         >
+          <input type="hidden" name="form-name" value="contact" />
           {children}
 
           {errors && errors.root && (
