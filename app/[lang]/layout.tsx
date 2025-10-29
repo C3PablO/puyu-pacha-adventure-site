@@ -13,7 +13,6 @@ import ErrorNoHeader from '@/components/errorNoHeader'
 import ErrorNoKeys from '@/components/errorNoKeys'
 import PageLayout from '@/components/layout'
 import { ThemeProvider } from '@/components/themeProvider'
-import NetlifyFormDetector from '@/components/NetlifyFormDetector'
 import { i18n } from '@/i18n-config'
 import config from '@/react-bricks/config'
 
@@ -131,7 +130,6 @@ export default async function Layout(props: {
       <body
         className={`${nunito.variable} ${playwriteHU.variable} font-sans dark:bg-gray-900 antialiased`}
       >
-        <NetlifyFormDetector />
         <ThemeProvider
           attribute="class"
           storageKey="color-mode"

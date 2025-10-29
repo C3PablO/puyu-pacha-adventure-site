@@ -1,11 +1,24 @@
-<html>
-  <head></head>
-  <body>
-    <form name="feedback" data-netlify="true" hidden>
-      <input name="form-firstname" />
-      <input name="email" type="email" />
-      <input name="email" type="text" />
-      <textarea name="message"></textarea>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forms</title>
+</head>
+<body>
+    <!-- Netlify Form Detection - This file allows Netlify to detect forms at build time -->
+
+    <!-- Feedback/Contact Form -->
+    <form name="feedback" method="POST" data-netlify="true" data-netlify-honeypot="bot-field">
+        <input type="hidden" name="form-name" value="feedback" />
+        <input type="hidden" name="bot-field" />
+        <input type="text" name="firstname" />
+        <input type="text" name="lastname" />
+        <input type="email" name="email" />
+        <textarea name="message"></textarea>
+        <input type="checkbox" name="privacy" />
+        <button type="submit">Submit</button>
     </form>
-  </body>
+
+</body>
 </html>
