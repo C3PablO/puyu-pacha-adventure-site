@@ -57,7 +57,7 @@ const FormBuilderClient: React.FC<FormBuilderClientProps> = ({
 
       console.log('Submitting form data:', Object.fromEntries(params))
 
-      const response = await fetch('/__forms.html', {
+      const response = await fetch('/forms.html', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: params.toString(),
