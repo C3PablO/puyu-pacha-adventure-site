@@ -1,31 +1,49 @@
-import { Buffer } from 'node:buffer'
-
-export default async (req) => {
+export default async (req, context) => {
   if (req.method !== 'POST') {
     return new Response('Method not allowed', { status: 405 })
   }
 
   try {
     const formData = await req.formData()
-    
-    // Convert to URL-encoded format for Netlify Forms
-    const params = new URLSearchParams()
+
+    // Extract form data
+    const data = {}
     for (const [key, value] of formData.entries()) {
-      params.append(key, value)
+      data[key] = value
     }
 
-    console.log('Submitting to Netlify Forms:', Object.fromEntries(params))
+    console.log('Received form submission:', data)
 
-    // Submit to Netlify Forms by POSTing with the special header
-    const response = await fetch('https://puyupacha.netlify.app/', {
+    // Get Netlify site info from context
+    const siteId = context.site?.id || Netlify.env.get('SITE_ID')
+    const formName = data['form-name'] || 'feedback'
+
+    console.log('Site ID:', siteId)
+    console.log('Form name:', formName)
+
+    // Try to submit using Netlify's internal submission endpoint
+    // This bypasses the website entirely
+    const submissionUrl = `https://api.netlify.com/api/v1/submissions`
+
+    const submissionData = {
+      site_id: siteId,
+      form_name: formName,
+      body: JSON.stringify(data)
+    }
+
+    console.log('Submitting to Netlify API:', submissionUrl)
+
+    const response = await fetch(submissionUrl, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Type': 'application/json',
       },
-      body: params.toString(),
+      body: JSON.stringify(submissionData)
     })
 
-    console.log('Netlify Forms response:', response.status, response.statusText)
+    console.log('Netlify API response:', response.status, response.statusText)
+    const responseText = await response.text()
+    console.log('Response body:', responseText)
 
     // Redirect to thank you page
     return new Response(null, {
