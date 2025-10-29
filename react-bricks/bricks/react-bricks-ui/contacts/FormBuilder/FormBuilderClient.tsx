@@ -46,42 +46,35 @@ const FormBuilderClient: React.FC<FormBuilderClientProps> = ({
   const handleFormSubmit = async (event: any) => {
     // Prevent default form submission
     event.preventDefault()
-    const formData = new FormData(event.target);
-    await fetch("/forms.html", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams(formData as any).toString(),
-    });
-    alert("Form submitted successfully!");
 
-    // try {
-    //   // Get form element and create FormData from it
-    //   const form = event.target
-    //   const formData = new FormData(form)
+    try {
+      // Get form element and create FormData from it
+      const form = event.target
+      const formData = new FormData(form)
 
-    //   // Convert FormData to URLSearchParams
-    //   const params = new URLSearchParams(formData as any)
+      // Convert FormData to URLSearchParams
+      const params = new URLSearchParams(formData as any)
 
-    //   console.log('Submitting form data:', Object.fromEntries(params))
+      console.log('Submitting form data:', Object.fromEntries(params))
 
-    //   const response = await fetch('/', {
-    //     method: 'POST',
-    //     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    //     body: params.toString(),
-    //   })
+      const response = await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: params.toString(),
+      })
 
-    //   console.log('Form submission response:', response.status, response.statusText)
+      console.log('Form submission response:', response.status, response.statusText)
 
-    //   if (!response.ok) {
-    //     throw new Error(`Form submission failed with status ${response.status}`)
-    //   }
+      if (!response.ok) {
+        throw new Error(`Form submission failed with status ${response.status}`)
+      }
 
-    //   alert(successMessage || 'Form submitted successfully!')
-    // } catch (error) {
-    //   const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred'
-    //   alert(`Form submission failed: ${errorMessage}`)
-    //   console.error('Form submission error:', error)
-    // }
+      alert(successMessage || 'Form submitted successfully!')
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred'
+      alert(`Form submission failed: ${errorMessage}`)
+      console.error('Form submission error:', error)
+    }
   }
 
   if (!register || !handleSubmit) {
