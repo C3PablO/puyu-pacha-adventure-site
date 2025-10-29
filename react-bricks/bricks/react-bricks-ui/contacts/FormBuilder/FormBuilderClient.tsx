@@ -93,7 +93,7 @@ const FormBuilderClient: React.FC<FormBuilderClientProps> = ({
           onSubmit={handleSubmit(handleFormSubmit)}
           className="grid grid-cols-2 gap-4 p-6"
         >
-          <input type="hidden" name="form-name" value="contact" />
+          <input type="hidden" name="form-name" value="feedback" />
           {children}
 
           {errors && errors.root && (
