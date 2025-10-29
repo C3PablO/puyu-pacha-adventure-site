@@ -8,10 +8,12 @@ export default function NetlifyFormDetector() {
       name="feedback"
       method="POST"
       data-netlify="true"
+      data-netlify-honeypot="bot-field"
       hidden
       aria-hidden="true"
     >
       <input type="hidden" name="form-name" value="feedback" />
+      <input type="hidden" name="bot-field" />
       <input type="text" name="firstname" />
       <input type="text" name="lastname" />
       <input type="email" name="email" />
