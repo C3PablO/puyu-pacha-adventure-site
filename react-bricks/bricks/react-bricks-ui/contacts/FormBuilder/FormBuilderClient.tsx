@@ -57,13 +57,14 @@ const FormBuilderClient: React.FC<FormBuilderClientProps> = ({
         <form
           name="feedback"
           method="POST"
-          action="/thank-you"
+          action="/api/submit-form"
           data-netlify="true"
           data-netlify-honeypot="bot-field"
           className="grid grid-cols-2 gap-4 p-6"
         >
           <input type="hidden" name="form-name" value="feedback" />
           <input type="hidden" name="bot-field" />
+          <input type="hidden" name="subject" value="New Contact Form Submission" />
           {children}
 
           {errors && errors.root && (

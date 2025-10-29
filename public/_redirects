@@ -1,0 +1,2 @@
+# This file tells Netlify to process forms before Next.js
+# No redirects needed - Netlify should auto-detect forms with data-netlify="true"
