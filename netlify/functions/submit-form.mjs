@@ -3,6 +3,8 @@ export default async (req, context) => {
     return new Response('Method not allowed', { status: 405 })
   }
 
+  const debugInfo = []
+
   try {
     const formData = await req.formData()
 
@@ -12,17 +14,26 @@ export default async (req, context) => {
       data[key] = value
     }
 
-    console.log('Received form submission:', data)
+    debugInfo.push('=== FORM DATA RECEIVED ===')
+    debugInfo.push(JSON.stringify(data, null, 2))
 
     // Get Netlify site info from context
-    const siteId = context.site?.id || Netlify.env.get('SITE_ID')
+    debugInfo.push('\n=== NETLIFY CONTEXT ===')
+    debugInfo.push(`Site ID: ${context.site?.id || 'NOT FOUND'}`)
+    debugInfo.push(`Deploy ID: ${context.deploy?.id || 'NOT FOUND'}`)
+
+    const siteId = context.site?.id
     const formName = data['form-name'] || 'feedback'
 
-    console.log('Site ID:', siteId)
-    console.log('Form name:', formName)
+    if (!siteId) {
+      debugInfo.push('\n❌ ERROR: No site ID available')
+      return new Response(debugInfo.join('\n'), {
+        status: 500,
+        headers: { 'Content-Type': 'text/plain' }
+      })
+    }
 
     // Try to submit using Netlify's internal submission endpoint
-    // This bypasses the website entirely
     const submissionUrl = `https://api.netlify.com/api/v1/submissions`
 
     const submissionData = {
@@ -31,7 +42,9 @@ export default async (req, context) => {
       body: JSON.stringify(data)
     }
 
-    console.log('Submitting to Netlify API:', submissionUrl)
+    debugInfo.push('\n=== ATTEMPTING API SUBMISSION ===')
+    debugInfo.push(`URL: ${submissionUrl}`)
+    debugInfo.push(`Payload: ${JSON.stringify(submissionData, null, 2)}`)
 
     const response = await fetch(submissionUrl, {
       method: 'POST',
@@ -41,21 +54,32 @@ export default async (req, context) => {
       body: JSON.stringify(submissionData)
     })
 
-    console.log('Netlify API response:', response.status, response.statusText)
-    const responseText = await response.text()
-    console.log('Response body:', responseText)
+    debugInfo.push('\n=== API RESPONSE ===')
+    debugInfo.push(`Status: ${response.status} ${response.statusText}`)
 
-    // // Redirect to thank you page
-    // return new Response(null, {
-    //   status: 303,
-    //   headers: {
-    //     'Location': '/thank-you'
-    //   }
-    // })
-    alert('Form submitted successfully!')
+    const responseText = await response.text()
+    debugInfo.push(`Body: ${responseText}`)
+
+    if (response.ok) {
+      debugInfo.push('\n✅ SUCCESS! Check Netlify Dashboard for submission')
+    } else {
+      debugInfo.push('\n❌ FAILED - See response above')
+    }
+
+    return new Response(debugInfo.join('\n'), {
+      status: 200,
+      headers: { 'Content-Type': 'text/plain' }
+    })
+
   } catch (error) {
-    console.error('Form submission error:', error)
-    return new Response('Form submission failed: ' + error.message, { status: 500 })
+    debugInfo.push('\n=== ERROR ===')
+    debugInfo.push(error.message)
+    debugInfo.push(error.stack)
+
+    return new Response(debugInfo.join('\n'), {
+      status: 500,
+      headers: { 'Content-Type': 'text/plain' }
+    })
   }
 }
 
