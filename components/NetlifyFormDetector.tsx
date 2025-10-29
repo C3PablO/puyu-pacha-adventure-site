@@ -5,13 +5,13 @@
 export default function NetlifyFormDetector() {
   return (
     <form
-      name="contact"
+      name="feedback"
       method="POST"
       data-netlify="true"
       hidden
       aria-hidden="true"
     >
-      <input type="hidden" name="form-name" value="contact" />
+      <input type="hidden" name="form-name" value="feedback" />
       <input type="text" name="firstname" />
       <input type="text" name="lastname" />
       <input type="email" name="email" />
