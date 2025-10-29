@@ -45,13 +45,14 @@ export default async (req, context) => {
     const responseText = await response.text()
     console.log('Response body:', responseText)
 
-    // Redirect to thank you page
-    return new Response(null, {
-      status: 303,
-      headers: {
-        'Location': '/thank-you'
-      }
-    })
+    // // Redirect to thank you page
+    // return new Response(null, {
+    //   status: 303,
+    //   headers: {
+    //     'Location': '/thank-you'
+    //   }
+    // })
+    alert('Form submitted successfully!')
   } catch (error) {
     console.error('Form submission error:', error)
     return new Response('Form submission failed: ' + error.message, { status: 500 })
