@@ -3,8 +3,6 @@ export default async (req, context) => {
     return new Response('Method not allowed', { status: 405 })
   }
 
-  const debugInfo = []
-
   try {
     const formData = await req.formData()
 
@@ -14,71 +12,61 @@ export default async (req, context) => {
       data[key] = value
     }
 
-    debugInfo.push('=== FORM DATA RECEIVED ===')
-    debugInfo.push(JSON.stringify(data, null, 2))
+    console.log('Form submission received:', data)
 
-    // Get Netlify site info from context
-    debugInfo.push('\n=== NETLIFY CONTEXT ===')
-    debugInfo.push(`Site ID: ${context.site?.id || 'NOT FOUND'}`)
-    debugInfo.push(`Deploy ID: ${context.deploy?.id || 'NOT FOUND'}`)
+    // Get Resend API key from environment variable
+    const resendApiKey = Netlify.env.get('RESEND_API_KEY')
 
-    const siteId = context.site?.id
-    const formName = data['form-name'] || 'feedback'
-
-    if (!siteId) {
-      debugInfo.push('\n❌ ERROR: No site ID available')
-      return new Response(debugInfo.join('\n'), {
-        status: 500,
-        headers: { 'Content-Type': 'text/plain' }
+    if (!resendApiKey) {
+      console.error('RESEND_API_KEY not configured')
+      // For now, just log and redirect - you need to add the API key
+      return new Response(null, {
+        status: 303,
+        headers: { 'Location': '/thank-you' }
       })
     }
 
-    // Try to submit using Netlify's internal submission endpoint
-    const submissionUrl = `https://api.netlify.com/api/v1/submissions`
-
-    const submissionData = {
-      site_id: siteId,
-      form_name: formName,
-      body: JSON.stringify(data)
-    }
-
-    debugInfo.push('\n=== ATTEMPTING API SUBMISSION ===')
-    debugInfo.push(`URL: ${submissionUrl}`)
-    debugInfo.push(`Payload: ${JSON.stringify(submissionData, null, 2)}`)
-
-    const response = await fetch(submissionUrl, {
+    // Send email using Resend
+    const emailResponse = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${resendApiKey}`,
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify(submissionData)
+      body: JSON.stringify({
+        from: 'Contact Form <noreply@puyupacha.com>', // Change this to your verified domain
+        to: 'puyupacha@gmail.com', // Your email
+        subject: data.subject || 'New Contact Form Submission',
+        html: `
+          <h2>New Contact Form Submission</h2>
+          <p><strong>From:</strong> ${data.firstname}</p>
+          <p><strong>Email:</strong> ${data.email}</p>
+          <p><strong>Message:</strong></p>
+          <p>${data.message}</p>
+          <p><strong>Privacy accepted:</strong> ${data.privacy || 'No'}</p>
+        `
+      })
     })
 
-    debugInfo.push('\n=== API RESPONSE ===')
-    debugInfo.push(`Status: ${response.status} ${response.statusText}`)
-
-    const responseText = await response.text()
-    debugInfo.push(`Body: ${responseText}`)
-
-    if (response.ok) {
-      debugInfo.push('\n✅ SUCCESS! Check Netlify Dashboard for submission')
+    if (!emailResponse.ok) {
+      const errorText = await emailResponse.text()
+      console.error('Resend API error:', emailResponse.status, errorText)
     } else {
-      debugInfo.push('\n❌ FAILED - See response above')
+      console.log('Email sent successfully via Resend')
     }
 
-    return new Response(debugInfo.join('\n'), {
-      status: 200,
-      headers: { 'Content-Type': 'text/plain' }
+    // Redirect to thank you page
+    return new Response(null, {
+      status: 303,
+      headers: { 'Location': '/thank-you' }
     })
 
   } catch (error) {
-    debugInfo.push('\n=== ERROR ===')
-    debugInfo.push(error.message)
-    debugInfo.push(error.stack)
-
-    return new Response(debugInfo.join('\n'), {
-      status: 500,
-      headers: { 'Content-Type': 'text/plain' }
+    console.error('Form submission error:', error)
+    // Still redirect to thank you even if email fails
+    return new Response(null, {
+      status: 303,
+      headers: { 'Location': '/thank-you' }
     })
   }
 }
