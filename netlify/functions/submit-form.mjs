@@ -1,4 +1,6 @@
-export default async (req, context) => {
+import { Resend } from 'resend'
+
+export default async (req) => {
   if (req.method !== 'POST') {
     return new Response('Method not allowed', { status: 405 })
   }
@@ -19,40 +21,34 @@ export default async (req, context) => {
 
     if (!resendApiKey) {
       console.error('RESEND_API_KEY not configured')
-      // For now, just log and redirect - you need to add the API key
       return new Response(null, {
         status: 303,
         headers: { 'Location': '/thank-you' }
       })
     }
 
-    // Send email using Resend
-    const emailResponse = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${resendApiKey}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        from: 'Contact Form puyupacha@gmail.com>', // Change this to your verified domain
-        to: 'pabloromerojaern@gmail.com', // Your email
-        subject: data.subject || 'New Contact Form Submission',
-        html: `
-          <h2>New Contact Form Submission</h2>
-          <p><strong>From:</strong> ${data.firstname}</p>
-          <p><strong>Email:</strong> ${data.email}</p>
-          <p><strong>Message:</strong></p>
-          <p>${data.message}</p>
-          <p><strong>Privacy accepted:</strong> ${data.privacy || 'No'}</p>
-        `
-      })
+    // Initialize Resend with API key
+    const resend = new Resend(resendApiKey)
+
+    // Send email using Resend SDK
+    const { data: emailData, error } = await resend.emails.send({
+      from: 'onboarding@resend.dev',
+      to: 'pabloromerojaren@gmail.com',
+      subject: data.subject || 'New Contact Form Submission',
+      html: `
+        <h2>New Contact Form Submission</h2>
+        <p><strong>From:</strong> ${data.firstname}</p>
+        <p><strong>Email:</strong> ${data.email}</p>
+        <p><strong>Message:</strong></p>
+        <p>${data.message}</p>
+        <p><strong>Privacy accepted:</strong> ${data.privacy || 'No'}</p>
+      `
     })
 
-    if (!emailResponse.ok) {
-      const errorText = await emailResponse.text()
-      console.error('Resend API error:', emailResponse.status, errorText)
+    if (error) {
+      console.error('Resend error:', error)
     } else {
-      console.log('Email sent successfully via Resend')
+      console.log('Email sent successfully:', emailData)
     }
 
     // Redirect to thank you page
