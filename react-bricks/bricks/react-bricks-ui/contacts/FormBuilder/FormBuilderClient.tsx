@@ -43,37 +43,24 @@ const FormBuilderClient: React.FC<FormBuilderClientProps> = ({
 
   // const onSubmit = () => console.log('SUBMITTED - ', formspreeFormId)
 
-  const handleFormSubmit = async (data: Record<string, any>, event?: any) => {
+  const handleFormSubmit = async (event: any) => {
     // Prevent default form submission
-    if (event) {
-      event.preventDefault()
-    }
+    event.preventDefault()
 
     try {
-      // Create URLSearchParams for proper form encoding
-      const formData = new URLSearchParams()
+      // Get form element and create FormData from it
+      const form = event.target
+      const formData = new FormData(form)
 
-      // Add form name for Netlify (must be first)
-      formData.append('form-name', 'feedback')
+      // Convert FormData to URLSearchParams
+      const params = new URLSearchParams(formData as any)
 
-      // Convert data object to form data
-      Object.entries(data).forEach(([key, value]) => {
-        if (value !== null && value !== undefined) {
-          // Handle boolean values (checkboxes)
-          if (typeof value === 'boolean') {
-            formData.append(key, value ? 'true' : 'false')
-          } else {
-            formData.append(key, String(value))
-          }
-        }
-      })
-
-      console.log('Submitting form data:', Object.fromEntries(formData))
+      console.log('Submitting form data:', Object.fromEntries(params))
 
       const response = await fetch('/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: formData.toString(),
+        body: params.toString(),
       })
 
       console.log('Form submission response:', response.status, response.statusText)
@@ -106,7 +93,7 @@ const FormBuilderClient: React.FC<FormBuilderClientProps> = ({
           method="POST"
           data-netlify="true"
           data-netlify-honeypot="bot-field"
-          onSubmit={handleSubmit(handleFormSubmit)}
+          onSubmit={handleFormSubmit}
           className="grid grid-cols-2 gap-4 p-6"
         >
           <input type="hidden" name="form-name" value="feedback" />
