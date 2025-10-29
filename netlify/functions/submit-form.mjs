@@ -34,8 +34,8 @@ export default async (req, context) => {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        from: 'Contact Form <noreply@puyupacha.com>', // Change this to your verified domain
-        to: 'puyupacha@gmail.com', // Your email
+        from: 'Contact Form puyupacha@gmail.com>', // Change this to your verified domain
+        to: 'pabloromerojaern@gmail.com', // Your email
         subject: data.subject || 'New Contact Form Submission',
         html: `
           <h2>New Contact Form Submission</h2>
