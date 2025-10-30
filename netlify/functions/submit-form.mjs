@@ -49,7 +49,7 @@ export default async (req) => {
 
     const { data: emailData, error } = await resend.emails.send({
       from: 'onboarding@resend.dev',
-      to: 'pabloromerojaren@gmail.com',
+      to: 'puyupachaservice@gmail.com',
       subject: data.subject || 'New Contact Form Submission',
       html: `
         <h2>New Contact Form Submission</h2>
