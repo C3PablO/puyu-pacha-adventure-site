@@ -18,32 +18,9 @@ const FormBuilderClient: React.FC<FormBuilderClientProps> = ({
 }) => {
   const { register, setError, handleSubmit, errors, isSubmitSuccessful } =
     useContext(FormBuilderContext)
-
-  // const onSubmit = useSubmit(formspreeFormId, {
-  //   onError(errs) {
-  //     const formErrs = errs.getFormErrors()
-
-  //     for (const { code, message } of formErrs) {
-  //       setError &&
-  //         setError(`root.${code}`, {
-  //           type: code,
-  //           message,
-  //         })
-  //     }
-
-  //     const fieldErrs = errs.getAllFieldErrors()
-  //     for (const [field, errs] of fieldErrs) {
-  //       setError &&
-  //         setError(field, {
-  //           message: errs.map((e) => e.message).join(', '),
-  //         })
-  //     }
-  //   },
-  // })
-
+  console.log('!!!!!', successMessage)
   const handleFormSubmit = async (data: Record<string, any>) => {
     try {
-      console.log('Submitting form with data:', data)
 
       // Create FormData
       const formData = new FormData()
@@ -57,8 +34,6 @@ const FormBuilderClient: React.FC<FormBuilderClientProps> = ({
         }
       })
 
-      console.log('FormData entries:', Object.fromEntries(formData))
-
       const response = await fetch('/api/submit-form', {
         method: 'POST',
         body: formData,
@@ -70,7 +45,7 @@ const FormBuilderClient: React.FC<FormBuilderClientProps> = ({
       console.log('Response body:', responseText)
 
       if (response.ok) {
-        alert(successMessage || 'Form submitted successfully!')
+         console.log('Form submitted successfully!')
       } else {
         alert('Form submission failed. Check console for details.')
       }

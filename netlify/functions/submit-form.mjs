@@ -41,35 +41,19 @@ export default async (req) => {
     const resend = new Resend(resendApiKey)
     debugInfo.push('✅ Resend initialized')
 
-    // Send email using Resend SDK
-    debugInfo.push('\n=== SENDING EMAIL ===')
-    debugInfo.push('From: onboarding@resend.dev')
-    debugInfo.push('To: pabloromerojaren@gmail.com')
-    debugInfo.push(`Subject: ${data.subject || 'New Contact Form Submission'}`)
-
     const { data: emailData, error } = await resend.emails.send({
-      from: 'onboarding@resend.dev',
+      from: 'puyupachaservice@gmail.com',
       to: 'puyupachaservice@gmail.com',
-      subject: data.subject || 'New Contact Form Submission',
+      subject: data.subject || 'Nuevo mensaje de formulario de contacto',
       html: `
-        <h2>New Contact Form Submission</h2>
-        <p><strong>From:</strong> ${data.firstname}</p>
+        <h2>Nuevo mensaje de formulario de contacto</h2>
+        <p><strong>De:</strong> ${data.firstname}</p>
         <p><strong>Email:</strong> ${data.email}</p>
-        <p><strong>Message:</strong></p>
+        <p><strong>Mensaje:</strong></p>
         <p>${data.message}</p>
-        <p><strong>Privacy accepted:</strong> ${data.privacy || 'No'}</p>
+        <p><strong>Privacidad aceptada:</strong> ${data.privacy || 'No'}</p>
       `
     })
-
-    debugInfo.push('\n=== RESEND RESPONSE ===')
-    if (error) {
-      debugInfo.push('❌ ERROR:')
-      debugInfo.push(JSON.stringify(error, null, 2))
-    } else {
-      debugInfo.push('✅ SUCCESS!')
-      debugInfo.push(JSON.stringify(emailData, null, 2))
-      debugInfo.push('\n📧 Check your email at: pabloromerojaren@gmail.com')
-    }
 
     return new Response(debugInfo.join('\n'), {
       status: error ? 500 : 200,
