@@ -139,6 +139,15 @@ const SimpleCarouselClient: React.FC<SimpleCarouselProps> = ({
         .simple-carousel .slick-dots li button:hover:before {
           background-color: rgba(0, 0, 0, 0.75);
         }
+        .dark .simple-carousel .slick-dots li button:before {
+          background-color: rgb(107 114 128);
+        }
+        .dark .simple-carousel .slick-dots li.slick-active button:before {
+          background-color: rgb(229 231 235);
+        }
+        .dark .simple-carousel .slick-dots li button:hover:before {
+          background-color: rgb(156 163 175);
+        }
       `}</style>
 
       <div className="simple-carousel">
