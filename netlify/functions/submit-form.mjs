@@ -43,7 +43,7 @@ export default async (req) => {
 
     const { data: emailData, error } = await resend.emails.send({
       from: 'onboarding@resend.dev',
-      to: 'puyupachaservice@gmail.com',
+      to: 'puyupacha@gmail.com',
       subject: data.subject || 'Nuevo mensaje de formulario de contacto',
       html: `
         <h2>Nuevo mensaje de formulario de contacto</h2>
