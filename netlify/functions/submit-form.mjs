@@ -20,7 +20,7 @@ export default async (req) => {
     debugInfo.push(JSON.stringify(data, null, 2))
 
     // Get Resend API key from environment variable
-    const resendApiKey = Netlify.env.get('RESEND_API_KEY')
+    const resendApiKey = process.env.RESEND_API_KEY
 
     debugInfo.push('\n=== RESEND API KEY ===')
     debugInfo.push(resendApiKey ? `Found (${resendApiKey.substring(0, 10)}...)` : '❌ NOT FOUND')
@@ -41,6 +41,12 @@ export default async (req) => {
     const resend = new Resend(resendApiKey)
     debugInfo.push('✅ Resend initialized')
 
+    // Send email using Resend SDK
+    debugInfo.push('\n=== SENDING EMAIL ===')
+    debugInfo.push('From: onboarding@resend.dev')
+    debugInfo.push('To: puyupacha@gmail.com')
+    debugInfo.push(`Subject: ${data.subject || 'Nuevo mensaje de formulario de contacto'}`)
+
     const { data: emailData, error } = await resend.emails.send({
       from: 'onboarding@resend.dev',
       to: 'puyupacha@gmail.com',
@@ -54,6 +60,16 @@ export default async (req) => {
         <p><strong>Privacidad aceptada:</strong> ${data.privacy || 'No'}</p>
       `
     })
+
+    debugInfo.push('\n=== RESEND RESPONSE ===')
+    if (error) {
+      debugInfo.push('❌ ERROR:')
+      debugInfo.push(JSON.stringify(error, null, 2))
+    } else {
+      debugInfo.push('✅ SUCCESS!')
+      debugInfo.push(JSON.stringify(emailData, null, 2))
+      debugInfo.push('\n📧 Check your email at: puyupacha@gmail.com')
+    }
 
     return new Response(debugInfo.join('\n'), {
       status: error ? 500 : 200,
