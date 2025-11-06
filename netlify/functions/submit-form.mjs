@@ -48,7 +48,7 @@ export default async (req) => {
     debugInfo.push(`Subject: ${data.subject || 'Nuevo mensaje de formulario de contacto'}`)
 
     const { data: emailData, error } = await resend.emails.send({
-      from: 'onboarding@resend.dev',
+      from: 'noreply@puyupachaadventure.com',
       to: 'puyupacha@gmail.com',
       subject: data.subject || 'Nuevo mensaje de formulario de contacto',
       html: `
